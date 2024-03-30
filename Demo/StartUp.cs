@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Serialization;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
-
+/*
 
 namespace Demo
 {
@@ -69,27 +69,22 @@ namespace Demo
         }
     
 }
-} 
+} */
 
-/*
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
-
-
+using Microsoft.OpenApi.Models;
 
 namespace Demo
 {
-    public class Startup
+    public class StartUp
     {
-        public Startup(IConfiguration configuration)
+        public StartUp(IConfiguration configuration)
         {
             Configuration = configuration;
         }
@@ -113,21 +108,33 @@ namespace Demo
             });
 
             services.AddControllers();
+
+            // Swagger configuration
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            // Enable CORS
-            app.UseCors("AllowOrigin");
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseRouting();
+            // Enable CORS
+            app.UseCors("AllowOrigin");
 
+            // Swagger
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
+
+            app.UseRouting();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -138,4 +145,6 @@ namespace Demo
     }
 }
 
-*/
+
+
+

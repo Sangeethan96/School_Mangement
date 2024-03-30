@@ -37,7 +37,7 @@ app.MapControllers();
 app.Run(); */
 
 
-/*
+
  namespace Demo
 {
     public class Program
@@ -56,8 +56,8 @@ app.Run(); */
     }
 
 
-}  */
-
+}  
+/*
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -131,5 +131,5 @@ namespace Demo
                     });
                 });
     }
-}
+} */
 
