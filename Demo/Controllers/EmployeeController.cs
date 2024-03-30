@@ -59,20 +59,91 @@ namespace Demo.Controllers
 
         // POST api/<EmployeeController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public JsonResult Post(Employee jb)
         {
+            string query = @"INSERT INTO dbo.Employee (EFName,ELName,EAddress) VALUES (@EFName,@ELName,@EAddress)";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("VacancyConn");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@EFName", jb.EFName);
+                    myCommand.Parameters.AddWithValue("@ELName", jb.ELName);
+                    myCommand.Parameters.AddWithValue("@EAddress", jb.EAddress);
+
+
+
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult(table);
         }
 
         // PUT api/<EmployeeController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        public JsonResult Put(Employee jb)
         {
+            string query = @"Update dbo.Employee set EFName=@EFName,ELName=@ELName,EAddress=@EAddress where EID=@EID";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("VacancyConn");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@EID", jb.EID);
+                    myCommand.Parameters.AddWithValue("@EFName", jb.EFName);
+                    myCommand.Parameters.AddWithValue("@ELName", jb.ELName);
+                    myCommand.Parameters.AddWithValue("@EAddress", jb.EAddress);
+
+
+
+
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult("Update Successfully");
         }
 
         // DELETE api/<EmployeeController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public JsonResult Delete(int id)
         {
+            string query = @"delete from  dbo.Employee  where EID=@JID";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("VacancyConn");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@JID", id);
+
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult("Deleted Successfully");
         }
+
     }
 }

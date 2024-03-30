@@ -5,7 +5,8 @@ namespace Demo.Models
 {
     public class Employee
     {
-
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int EID { get; set; }
 
         
