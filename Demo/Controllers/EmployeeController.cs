@@ -105,7 +105,7 @@ namespace Demo.Controllers
                     myCommand.Parameters.AddWithValue("@EFName", jb.EFName);
                     myCommand.Parameters.AddWithValue("@ELName", jb.ELName);
                     myCommand.Parameters.AddWithValue("@EAddress", jb.EAddress);
-
+                    myCommand.Parameters.AddWithValue("@Subject", jb.Subject);
 
 
 

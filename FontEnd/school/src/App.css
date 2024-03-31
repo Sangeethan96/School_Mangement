@@ -37,3 +37,12 @@ label {
   font-weight: 600;
   color: rgb(34, 34, 34);
 }
+
+.bg
+{
+  background-image: url(./Images/school.jpg);
+  width: 200px;
+  height: 200px;
+  background-size: cover;
+
+}

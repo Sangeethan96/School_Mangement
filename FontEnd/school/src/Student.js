@@ -9,7 +9,9 @@ function Student() {
   const [SName, setSName] = useState('');
   const [SLName, setSLName] = useState('');
   const [Grade, setGrade] = useState('');
-  const [Address, setAddress] = useState('');
+  const [SAddress, setSAddress] = useState('');
+  const [ContactNumber, setContactNumber] = useState('');
+  const [showModal, setShowModal] = useState(false);
   //const apiUrl = " https://localhost:44375/api/Student";
 
   const refreshList = () => {
@@ -45,8 +47,12 @@ function Student() {
     setGrade(e.target.value);
   };
 
-  const changeAddress = e => {
-    setAddress(e.target.value);
+  const changeSAddress = e => {
+    setSAddress(e.target.value);
+  };
+
+  const changeContactNumber = e => {
+    setContactNumber(e.target.value);
   };
 
   const addClick = () => {
@@ -55,7 +61,8 @@ function Student() {
     setSName('');
     setSLName('');
     setGrade('');
-    setAddress('');
+    setSAddress('');
+    setContactNumber('');
   };
 
   const editClick = (jb)=> {
@@ -64,7 +71,8 @@ function Student() {
     setSName(jb.SName);
     setSLName(jb.SLName);
     setGrade(jb.Grade);
-    setAddress(jb.Address);
+    setSAddress(jb.SAddress);
+    setContactNumber(jb.ContactNumber);
   };
 
   const createClick = () => {
@@ -78,16 +86,23 @@ function Student() {
         SName: SName,
         SLName: SLName,
         Grade: Grade,
-        Address:Address
+        SAddress:SAddress,
+        ContactNumber:ContactNumber
       })
     })
-      .then(res => res.json())
+    .then(res => {
+        if (!res.ok) {
+          throw new Error('Failed to create student');
+        }
+        return res.json();
+      })
       .then(result => {
-        alert(result);
+        alert(result+"Data added Succusfully");
+        setShowModal(false); // Close modal
         refreshList();
       })
       .catch(error => {
-        alert('Failed');
+        alert('Failed to create student: ' + error.message);
       });
   };
 // Make sure here All neccesorry Put method area available eg(SID,SName)
@@ -103,7 +118,8 @@ function Student() {
         SName: SName,
         SLName: SLName,
         Grade: Grade,
-        Address:Address
+        SAddress:SAddress,
+        ContactNumber:ContactNumber
       })
     })
       .then(res => res.json())
@@ -170,7 +186,8 @@ function Student() {
             <th>SName</th>
             <th>SLName</th>
             <th>Grade</th>
-            <th>Address</th>
+            <th>SAddress</th>
+            <th>ContactNumber</th>
           </tr>
         </thead>
         <tbody>
@@ -180,7 +197,8 @@ function Student() {
               <td>{jb.SName}</td>
               <td>{jb.SLName}</td>
               <td>{jb.Grade}</td>
-              <td>{jb.Address}</td>
+              <td>{jb.SAddress}</td>
+              <td>{jb.ContactNumber}</td>
               <td>
                 <button
                   type="button"
@@ -205,7 +223,8 @@ function Student() {
       </table>
 
       <div
-        className="modal fade"
+        //className="modal fade"
+        className={`modal fade ${showModal ? 'show' : ''}`}
         id="exampleModal"
         tabIndex="-1"
         aria-labelledby="exampleModalLabel"
@@ -245,12 +264,33 @@ function Student() {
               <div className="input-group mb-3">
                 <span className="input-group-text">Grade</span>
                 <input
-                  type="date"
+                  type="text"
                   className="form-control"
                   value={Grade}
                   onChange={changeGrade}
                 />
               </div>
+
+              <div className="input-group mb-3">
+                <span className="input-group-text">SAddress</span>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={SAddress}
+                  onChange={changeSAddress}
+                />
+              </div>
+
+              <div className="input-group mb-3">
+                <span className="input-group-text">ContactNumber</span>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={ContactNumber}
+                  onChange={changeContactNumber}
+                />
+              </div>
+
             </div>
             <div className="modal-footer">
               <button

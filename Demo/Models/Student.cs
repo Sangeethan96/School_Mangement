@@ -10,6 +10,7 @@ namespace Demo.Models
 
         public string SLName { get; set; }
 
+        [Range(1, 13, ErrorMessage = "Grade must be between 1 and 13.")]
         public int Grade { get; set; }
 
         public string SAddress { get; set; }
