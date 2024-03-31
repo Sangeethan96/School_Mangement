@@ -37,6 +37,8 @@ function Login(props) {
             localStorage.setItem("email", result.email);
             navigate("/Student");
             alert('Login Successful');
+            window.location.reload(); // Refresh the page
+
         } else {
             alert('Invalid email or Password');
         }
