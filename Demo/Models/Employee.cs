@@ -18,6 +18,11 @@ namespace Demo.Models
 
         public string EAddress { get; set; }
 
-        
+
+         public string Subject { get; set; }
+
+
+
+
     }
 }

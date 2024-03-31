@@ -4,6 +4,7 @@ using System.Linq;
 using Demo.Models;
 using System.Data.SqlClient;
 using System.Data;
+using System.Reflection;
 
 
 
@@ -23,10 +24,12 @@ namespace Demo.Controllers
             _env = env;
         }
 
-       
-       
+
+
 
         // POST api/<LoginController>
+
+        /*
         [HttpPost]
         public IActionResult Login(Login model)
         {
@@ -70,7 +73,57 @@ namespace Demo.Controllers
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
+        }*/
+
+
+        [HttpPost]
+        //[Route("Login")]
+        public Response Login(Login login)
+        {
+            Response response = new Response();
+            string sqlDataSource = _configuration.GetConnectionString("VacancyConn");
+
+            // Perform the login logic here
+            // Replace the code below with your actual implementation to query the database and verify the username and password
+            bool loginSuccessful = VerifyLogin(login.Email, login.LPassword);
+
+            if (loginSuccessful)
+            {
+                response.StatusCode = 200;
+                response.StatusMessage = "Login Successful!";
+            }
+            else
+            {
+                response.StatusCode = 100;
+                response.StatusMessage = "Login Failed!";
+            }
+
+            return response;
         }
+
+        private bool VerifyLogin(string Email, string LPassword)
+        {
+            // Implement your database query or any other logic to verify the username and password
+            // For simplicity, let's assume the username and password are stored in a table named "Users"
+
+            string query = "SELECT LoginID FROM dbo.Login WHERE Email = @Email AND LPassword = @LPassword";
+
+            int result = 0;
+            using (SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("VacancyConn")))
+            {
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Email", Email);
+                    command.Parameters.AddWithValue("@LPassword",LPassword);
+                    connection.Open();
+                    result = (int)command.ExecuteScalar();
+                }
+            }
+
+            // If the result is greater than 0, the login is successful
+            return result > 0;
+        }
+
 
     }
 }

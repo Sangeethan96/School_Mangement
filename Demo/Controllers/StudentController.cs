@@ -1,17 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Data;
+﻿using Demo.Models;
 using Microsoft.AspNetCore.Mvc;
-
-using Microsoft.AspNetCore.Http;
-//using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Data;
 using System.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
-using Demo.Models;
+using System.Data;
+
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,26 +10,25 @@ namespace Demo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployeeController : ControllerBase
-
-
+    public class StudentController : ControllerBase
     {
+        
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _env;
-        public EmployeeController(IConfiguration configuration, IWebHostEnvironment env)
+        public StudentController(IConfiguration configuration, IWebHostEnvironment env)
         {
             _configuration = configuration;
             _env = env;
         }
-        // GET: api/<EmployeeController>
+        // GET: api/<StudentController>
         [HttpGet]
 
-       
+
         public JsonResult Get()
         {
-            
-            string query = @"SELECT EID,EFName,ELName,EAddress,Subject from dbo.Employee";
-            
+
+            string query = @"SELECT SID,SName,SLName,Grade,SAddress,ContactNumber from dbo.Student";
+
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("VacancyConn");
             SqlDataReader myReader;
@@ -57,11 +47,11 @@ namespace Demo.Controllers
             return new JsonResult(table);
         }
 
-        // POST api/<EmployeeController>
+        // POST api/<StudentController>
         [HttpPost]
-        public JsonResult Post(Employee jb)
+        public JsonResult Post(Student sd)
         {
-            string query = @"INSERT INTO dbo.Employee (EFName,ELName,EAddress,Subject) VALUES (@EFName,@ELName,@EAddress,@Subject)";
+            string query = @"INSERT INTO dbo.Student (SName,SLName,Grade,SAddress,ContactNumber) VALUES (@SName,@SLName,@Grade,@SAddress,@ContactNumber)";
 
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("VacancyConn");
@@ -71,10 +61,11 @@ namespace Demo.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@EFName", jb.EFName);
-                    myCommand.Parameters.AddWithValue("@ELName", jb.ELName);
-                    myCommand.Parameters.AddWithValue("@EAddress", jb.EAddress);
-                    myCommand.Parameters.AddWithValue("@Subject", jb.Subject);
+                    myCommand.Parameters.AddWithValue("@Grade", sd.Grade);
+                    myCommand.Parameters.AddWithValue("@SName", sd.SName);
+                    myCommand.Parameters.AddWithValue("@SLName", sd.SLName);
+                    myCommand.Parameters.AddWithValue("@SAddress", sd.SAddress);
+                    myCommand.Parameters.AddWithValue("@ContactNumber", sd.ContactNumber);
 
 
                     myReader = myCommand.ExecuteReader();
@@ -87,11 +78,11 @@ namespace Demo.Controllers
             return new JsonResult(table);
         }
 
-        // PUT api/<EmployeeController>/5
+        // PUT api/<StudentController>/5
         [HttpPut]
-        public JsonResult Put(Employee jb)
+        public JsonResult Put(Student sd)
         {
-            string query = @"Update dbo.Employee set EFName=@EFName,ELName=@ELName,EAddress=@EAddress,Subject=@Subject where EID=@EID";
+            string query = @"Update dbo.Student set SName=@SName,SLName=@SLName,Grade=@Grade,SAddress=@SAddress,ContactNumber=@ContactNumber where SID=@SID";
 
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("VacancyConn");
@@ -101,10 +92,12 @@ namespace Demo.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@EID", jb.EID);
-                    myCommand.Parameters.AddWithValue("@EFName", jb.EFName);
-                    myCommand.Parameters.AddWithValue("@ELName", jb.ELName);
-                    myCommand.Parameters.AddWithValue("@EAddress", jb.EAddress);
+                    myCommand.Parameters.AddWithValue("@SID", sd.SID);
+                    myCommand.Parameters.AddWithValue("@SName", sd.SName);
+                    myCommand.Parameters.AddWithValue("@SLName", sd.SLName);
+                    myCommand.Parameters.AddWithValue("@Grade", sd.Grade);
+                    myCommand.Parameters.AddWithValue("@SAddress", sd.SAddress);
+                    myCommand.Parameters.AddWithValue("@ContactNumber", sd.ContactNumber);
 
 
 
@@ -119,11 +112,11 @@ namespace Demo.Controllers
             return new JsonResult("Update Successfully");
         }
 
-        // DELETE api/<EmployeeController>/5
+        // DELETE api/<StudentController>/5
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {
-            string query = @"delete from  dbo.Employee  where EID=@JID";
+            string query = @"delete from  dbo.Student  where SID=@SID";
 
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("VacancyConn");
@@ -133,7 +126,7 @@ namespace Demo.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@JID", id);
+                    myCommand.Parameters.AddWithValue("@SID", id);
 
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
@@ -144,6 +137,5 @@ namespace Demo.Controllers
 
             return new JsonResult("Deleted Successfully");
         }
-
     }
 }
