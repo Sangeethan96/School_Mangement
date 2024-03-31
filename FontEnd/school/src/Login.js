@@ -6,8 +6,8 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
 function Login(props) {
     const navigate = useNavigate();
-    const [username, setUserName] = useState('');
-    const [password, setPassword] = useState('');
+    const [Email, setEmail] = useState('');
+    const [LPassword, setLPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     //const history = useHistory();
   
@@ -19,8 +19,8 @@ function Login(props) {
       const apiUrl = " https://localhost:44375/api/Login";
   
       const data = {
-        UserName: username,
-        Password: password,
+        Email: Email,
+        LPassword: LPassword,
       };
   
       axios.post(apiUrl, data)
@@ -28,15 +28,16 @@ function Login(props) {
           const result = response.data;
           //Console log where you can check the fontend data when running in the browser
           console.log(result);
+          console.log(result.StatusCode);
           
           if (result.StatusCode = 200) {
-            localStorage.setItem("username", result.username);
+            localStorage.setItem("email", result.email);
            // props.history.push('/Dashboard');
-            navigate("/admin");
+            navigate("/home");
             alert('Login Succesful');
           } else {
             console.log(result.message);
-            alert('Invalid Username or Password');
+            alert('Invalid email or Password');
            
           }
         })
@@ -61,7 +62,7 @@ function Login(props) {
               <label>Email address</label>
               <input
               
-              onChange={(e) => setUserName(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
                name="Username" 
                 type="username"
                 className="form-control mt-1"
@@ -71,8 +72,8 @@ function Login(props) {
             <div className="form-group mt-3">
               <label>Password</label>
               <input
-                onChange={(e) => setPassword(e.target.value)}
-               name="Password"
+                onChange={(e) => setLPassword(e.target.value)}
+               name="LPassword"
                type={showPassword ? 'text' : 'password'}
                 className="form-control mt-1"
                 placeholder="Enter password"
