@@ -24,56 +24,82 @@ namespace Demo.Controllers
             _env = env;
         }
 
+        [HttpGet]
+        public IActionResult Get()
+        {
+           
+                string query = @"SELECT LoginId,Email,LPassword FROM dbo.Login ";
+                DataTable table = new DataTable();
+                string sqlDataSource = _configuration.GetConnectionString("VacancyConn");
+
+                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+                {
+                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+
+
+                        myCon.Open();
+                        SqlDataReader myReader = myCommand.ExecuteReader();
+                        table.Load(myReader);
+                        myCon.Close();
+                    }
+                }
+
+                
+            
+            return new JsonResult(table);
+
+        }
 
 
 
         // POST api/<LoginController>
 
-        /*
-        [HttpPost]
-        public IActionResult Login(Login model)
-        {
-            if (!ModelState.IsValid)
+            /*
+            [HttpPost]
+            public IActionResult Login(Login model)
             {
-                return BadRequest("Invalid model data.");
-            }
-
-            string query = "SELECT LoginID FROM dbo.Login WHERE Email = @Email AND LPassword = @LPassword";
-            DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("VacancyConn");
-
-            try
-            {
-                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+                if (!ModelState.IsValid)
                 {
-                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                    {
-                        myCommand.Parameters.AddWithValue("@Email", model.Email);
-                        myCommand.Parameters.AddWithValue("@LPassword", model.LPassword);
+                    return BadRequest("Invalid model data.");
+                }
 
-                        myCon.Open();
-                        SqlDataReader myReader = myCommand.ExecuteReader();
-                        table.Load(myReader);
-                        myReader.Close();
+                string query = "SELECT LoginID FROM dbo.Login WHERE Email = @Email AND LPassword = @LPassword";
+                DataTable table = new DataTable();
+                string sqlDataSource = _configuration.GetConnectionString("VacancyConn");
+
+                try
+                {
+                    using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+                    {
+                        using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                        {
+                            myCommand.Parameters.AddWithValue("@Email", model.Email);
+                            myCommand.Parameters.AddWithValue("@LPassword", model.LPassword);
+
+                            myCon.Open();
+                            SqlDataReader myReader = myCommand.ExecuteReader();
+                            table.Load(myReader);
+                            myReader.Close();
+                        }
+                    }
+
+                    if (table.Rows.Count == 1)
+                    {
+                        // Login successful
+                        return Ok("Login successful.");
+                    }
+                    else
+                    {
+                        // Login failed
+                        return Unauthorized("Invalid email or password.");
                     }
                 }
-
-                if (table.Rows.Count == 1)
+                catch (Exception ex)
                 {
-                    // Login successful
-                    return Ok("Login successful.");
+                    return StatusCode(500, $"Internal server error: {ex.Message}");
                 }
-                else
-                {
-                    // Login failed
-                    return Unauthorized("Invalid email or password.");
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }*/
+            }*/
 
 
         [HttpPost]
@@ -122,6 +148,36 @@ namespace Demo.Controllers
 
             // If the result is greater than 0, the login is successful
             return result > 0;
+        }
+
+
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody] Login model)
+        {
+            try
+            {
+                string query = "UPDATE dbo.Login SET Email = @Email, LPassword = @LPassword WHERE LoginID = @LoginID";
+                string sqlDataSource = _configuration.GetConnectionString("VacancyConn");
+
+                using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+                {
+                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.Parameters.AddWithValue("@LoginID", id);
+                        myCommand.Parameters.AddWithValue("@Email", model.Email);
+                        myCommand.Parameters.AddWithValue("@LPassword", model.LPassword);
+
+                        myCon.Open();
+                        myCommand.ExecuteNonQuery();
+                    }
+                }
+
+                return Ok("User updated successfully");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
 
