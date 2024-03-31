@@ -33,7 +33,7 @@ function Login(props) {
           if (result.StatusCode = 200) {
             localStorage.setItem("email", result.email);
            // props.history.push('/Dashboard');
-            navigate("/home");
+            navigate("/Student");
             alert('Login Succesful');
           } else {
             console.log(result.message);

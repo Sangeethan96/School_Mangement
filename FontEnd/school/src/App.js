@@ -1,15 +1,16 @@
 import './App.css';
-import Home  from './Home';
+import Home from './components/Home';
 import  Employee  from './Employee';
 import Login from './Login';
 import Student from './Student';
 import { variables } from './Variables';
 import {BrowserRouter, Route, Routes,NavLink} from 'react-router-dom';
+import Contact from './Contact';
 function App() {
   return (
     <BrowserRouter>
     <div className="App container">
-      <h3 className='d-flex justify-content-center m'> Reactjs Fontend</h3>
+      <h3 className='d-flex justify-content-center m'> ABC SChool</h3>
       
       <nav className="navbar navbar-expand-sm bg-light navbar-dark">
         <ul className="navbar-nav">
@@ -26,7 +27,7 @@ function App() {
             </NavLink>
           </li>
           
-          <li className="nav-item- m-1">
+          {/* <li className="nav-item- m-1">
             <NavLink className="btn btn-light btn-outline-primary" to="/employee">
               Employee
             </NavLink>
@@ -38,7 +39,7 @@ function App() {
               Student
             </NavLink>
 
-          </li>
+          </li> */}
         </ul>
       </nav>
 
@@ -47,6 +48,7 @@ function App() {
         <Route path='/employee' element={<Employee/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/student' element={<Student/>}/>
+        <Route path='/contact' element={<Contact/>}/>
       </Routes>
 
     </div>
