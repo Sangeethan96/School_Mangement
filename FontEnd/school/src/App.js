@@ -2,6 +2,8 @@ import './App.css';
 import Home  from './Home';
 import  Employee  from './Employee';
 import Login from './Login';
+import Student from './Student';
+import { variables } from './Variables';
 import {BrowserRouter, Route, Routes,NavLink} from 'react-router-dom';
 function App() {
   return (
@@ -30,6 +32,13 @@ function App() {
             </NavLink>
 
           </li>
+
+          <li className="nav-item- m-1">
+            <NavLink className="btn btn-light btn-outline-primary" to="/student">
+              Student
+            </NavLink>
+
+          </li>
         </ul>
       </nav>
 
@@ -37,6 +46,7 @@ function App() {
         <Route path='/home' element={<Home/>}/>
         <Route path='/employee' element={<Employee/>}/>
         <Route path='/login' element={<Login/>}/>
+        <Route path='/student' element={<Student/>}/>
       </Routes>
 
     </div>
