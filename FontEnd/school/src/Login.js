@@ -9,6 +9,7 @@ function Login(props) {
     const [Email, setEmail] = useState('');
     const [LPassword, setLPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [isLogin,setIsLogin]= useState(false)
     //const history = useHistory();
   
    
@@ -30,16 +31,16 @@ function Login(props) {
           console.log(result);
           console.log(result.StatusCode);
           
-          if (result.StatusCode = 200) {
+          if (result.StatusCode === 200) {
+            setIsLogin(true); // Update the state
+            localStorage.setItem("isLogin", true); // Set isLogin in localStorage
             localStorage.setItem("email", result.email);
-           // props.history.push('/Dashboard');
             navigate("/Student");
-            alert('Login Succesful');
-          } else {
-            console.log(result.message);
+            alert('Login Successful');
+        } else {
             alert('Invalid email or Password');
-           
-          }
+        }
+        
         })
         .catch((error) => {
           console.log(error);

@@ -13,7 +13,7 @@ class Home extends Component {
     const bannerHeadline='For every student, every classroom. Real results.'
     
     const buttonArr = [
-      { name: 'Learners', path: '/Login' },
+      //{ name: 'Learners', path: '/Login' },
       { name: 'Teachers', path: '/Login' },
       { name: 'Career', path: '/Home' },
       { name: 'Contact', path: '/Contact' }
